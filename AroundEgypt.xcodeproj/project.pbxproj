@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FA016D202E29CDA700A85889 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FA016D1F2E29CDA700A85889 /* Alamofire */; };
+		FA016D232E29CE0400A85889 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FA016D222E29CE0400A85889 /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		FA016D042E29C94D00A85889 /* AroundEgypt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AroundEgypt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA016D232E29CE0400A85889 /* Kingfisher in Frameworks */,
+				FA016D202E29CDA700A85889 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +62,7 @@
 				FA016D002E29C94D00A85889 /* Sources */,
 				FA016D012E29C94D00A85889 /* Frameworks */,
 				FA016D022E29C94D00A85889 /* Resources */,
+				FA016D2B2E29D03800A85889 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -65,6 +73,8 @@
 			);
 			name = AroundEgypt;
 			packageProductDependencies = (
+				FA016D1F2E29CDA700A85889 /* Alamofire */,
+				FA016D222E29CE0400A85889 /* Kingfisher */,
 			);
 			productName = AroundEgypt;
 			productReference = FA016D042E29C94D00A85889 /* AroundEgypt.app */;
@@ -94,6 +104,10 @@
 			);
 			mainGroup = FA016CFB2E29C94D00A85889;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FA016D1E2E29CDA700A85889 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				FA016D212E29CE0400A85889 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FA016D052E29C94D00A85889 /* Products */;
 			projectDirPath = "";
@@ -113,6 +127,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		FA016D2B2E29D03800A85889 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "
+";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FA016D002E29C94D00A85889 /* Sources */ = {
@@ -324,6 +360,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FA016D1E2E29CDA700A85889 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		FA016D212E29CE0400A85889 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FA016D1F2E29CDA700A85889 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA016D1E2E29CDA700A85889 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		FA016D222E29CE0400A85889 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FA016D212E29CE0400A85889 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FA016CFC2E29C94D00A85889 /* Project object */;
 }

@@ -7,20 +7,20 @@
         
 import Foundation
 
-// MARK: - Welcome
-struct Welcome: Codable {
+// MARK: - API Response
+struct APIResponse<T: Codable>: Codable {
     let meta: Meta
-    let data: [Experience]
+    let data: T
     let pagination: Pagination
 }
 
-// MARK: - Datum
+// MARK: - Experience
 struct Experience: Codable {
     let id, title: String
     let coverPhoto: String
     let description: String
     let viewsNo, likesNo, recommended, hasVideo: Int
-    let city: City
+    let city: City?
     let tourHTML: String
     let detailedDescription, address: String
 
@@ -56,7 +56,7 @@ struct City: Codable {
 // MARK: - Meta
 struct Meta: Codable {
     let code: Int
-//    let errors: [JSONAny]
+//    let errors: T
 }
 
 // MARK: - Pagination

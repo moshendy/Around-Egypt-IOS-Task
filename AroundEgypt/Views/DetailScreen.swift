@@ -12,136 +12,148 @@ struct DetailView: View {
     @EnvironmentObject var viewModel: ExperiencesViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var showTour: Bool = false
-
-    var experience: Experience? {
-        viewModel.experiences.first(where: { $0.id == experienceID }) ??
-        viewModel.recommended.first(where: { $0.id == experienceID })
-    }
+    @State private var loadedExperience: Experience? = nil
 
     var body: some View {
-        if let experience = experience {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    ZStack(alignment: .topTrailing) {
-                        ZStack(alignment: .center) {
-                            KFImage(URL(string: experience.coverPhoto))
-                                .placeholder {
-                                    Color(.systemGray5)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: 260)
+        Group {
+            if let experience = loadedExperience {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        ZStack(alignment: .topTrailing) {
+                            ZStack {
+                                KFImage(URL(string: experience.coverPhoto))
+                                    .placeholder {
+                                        Color(.systemGray5)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 260)
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 260)
+                                    .clipped()
+                                    .background(Color.white)
+                                    .ignoresSafeArea(edges: .top)
+
+                                if !experience.tourHTML.isEmpty {
+                                    Button(action: { showTour = true }) {
+                                        Text("EXPLORE NOW")
+                                            .font(.headline)
+                                            .padding(.vertical, 10)
+                                            .padding(.horizontal, 32)
+                                            .background(Color.white)
+                                            .foregroundColor(.orange)
+                                            .cornerRadius(12)
+                                            .shadow(radius: 4)
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                                 }
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 260)
-                                .clipped()
-                            // EXPLORE NOW button
-                            if !experience.tourHTML.isEmpty {
-                                Button(action: { showTour = true }) {
-                                    Text("EXPLORE NOW")
-                                        .font(.headline)
+                            }
+                            // Stats row at the bottom
+                            HStack {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "eye")
                                         .foregroundColor(.white)
-                                        .padding(.vertical, 10)
-                                        .padding(.horizontal, 32)
-                                        .background(Color.white)
-                                        .foregroundColor(.orange)
-                                        .cornerRadius(12)
-                                        .shadow(radius: 4)
+                                    Text("\(experience.viewsNo) views")
+                                        .foregroundColor(.white)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .center)
+                                Spacer()
+                                Image(systemName: "photo.on.rectangle.angled")
+                                    .foregroundColor(.white)
                             }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(Color.black.opacity(0.4))
+                            .frame(maxWidth: .infinity)
+                            .offset(y: -24)
+                            
+                            
                         }
-                        // Close button
-                        Button(action: { presentationMode.wrappedValue.dismiss() }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .font(.title)
-                                .foregroundColor(.white)
-                                .padding(8)
-                        }
-                    }
-                    .background(Color.white)
 
-                    // Stats row overlay at bottom of image
-                    HStack {
-                        HStack(spacing: 4) {
-                            Image(systemName: "eye")
-                                .foregroundColor(.white)
-                            Text("\(experience.viewsNo) views")
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                        Image(systemName: "photo.on.rectangle.angled")
-                            .foregroundColor(.white)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.4))
-                    .frame(maxWidth: .infinity)
-                    .offset(y: -24)
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(experience.title.isEmpty ? "Unknown Title" : experience.title)
-                                    .font(.title3)
-                                    .bold()
-                                if let city = experience.city?.name, !city.isEmpty {
-                                    Text("\(city), Egypt.")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                } else {
-                                    Text("Unknown City")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            Spacer()
-                            HStack(spacing: 16) {
-                                Button(action: {
-                                    // Share action (implement if needed)
-                                }) {
-                                    Image(systemName: "square.and.arrow.up")
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(alignment: .top) {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(experience.title.isEmpty ? "Unknown Title" : experience.title)
                                         .font(.title3)
-                                        .foregroundColor(.orange)
-                                }
-                                Button(action: {
-                                    Task { await viewModel.likeExperience(experience) }
-                                }) {
-                                    HStack(spacing: 4) {
-                                        Text("\(experience.likesNo)")
-                                        Image(systemName: "heart.fill")
-                                            .foregroundColor(experience.isLiked ? .red : .orange)
+                                        .bold()
+                                    if let city = experience.city?.name, !city.isEmpty {
+                                        Text("\(city), Egypt.")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                    } else {
+                                        Text("Unknown City")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
                                     }
                                 }
-                                .disabled(experience.isLiked)
+                                Spacer()
+                                HStack(spacing: 16) {
+                                    Button(action: {
+                                        // Share action (implement if needed)
+                                    }) {
+                                        Image(systemName: "square.and.arrow.up")
+                                            .font(.title3)
+                                            .foregroundColor(.orange)
+                                    }
+                                    Button(action: {
+                                        Task {
+                                            await viewModel.likeExperience(experience)
+                                            // Update local state so UI updates immediately
+                                            loadedExperience?.isLiked = true
+                                            loadedExperience?.likesNo += 1
+                                        }
+                                    }) {
+                                        HStack(spacing: 4) {
+                                            Text("\(experience.likesNo)")
+                                            Image(systemName: experience.isLiked ? "heart.fill" : "heart")
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.orange)
+                                        }
+                                    }
+                                    .disabled(experience.isLiked)
+                                }
                             }
+                            Divider()
+                            Text("Description")
+                                .font(.headline)
+                            Text(experience.detailedDescription.isEmpty ? "No description available." : experience.detailedDescription)
+                                .font(.body)
+                                .foregroundColor(.primary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
-                        Divider()
-                        Text("Description")
-                            .font(.headline)
-                        Text(experience.description.isEmpty ? "No description available." : experience.description)
-                            .font(.body)
-                            .foregroundColor(.primary)
-                            .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                        Spacer()
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 16)
-                    Spacer()
                 }
-            }
-            .background(Color(.systemBackground))
-            .ignoresSafeArea(edges: .top)
-            .sheet(isPresented: $showTour) {
-                if let url = URL(string: experience.tourHTML) {
-                    SafariView(url: url)
-                } else {
-                    Text("Invalid tour link")
-                        .padding()
+                .background(Color(.systemBackground))
+                .ignoresSafeArea(edges: .top)
+                .sheet(isPresented: $showTour) {
+                    if let url = URL(string: experience.tourHTML) {
+                        SafariView(url: url)
+                    } else {
+                        Text("Invalid tour link")
+                            .padding()
+                    }
                 }
+            } else {
+                ProgressView()
+                    .onAppear {
+                        Task {
+                            var exp = await viewModel.fetchExperienceDetails(id: experienceID)
+                            if let id = exp?.id, viewModel.likedExperienceIDs.contains(id) {
+                                exp?.isLiked = true
+                                // Sync likes count with main array if it's higher
+                                if let mainExp = (viewModel.experiences + viewModel.recommended).first(where: { $0.id == id }) {
+                                    if mainExp.likesNo > (exp?.likesNo ?? 0) {
+                                        exp?.likesNo = mainExp.likesNo
+                                    }
+                                }
+                            }
+                            loadedExperience = exp
+                        }
+                    }
             }
-        } else {
-            Text("Experience not found")
-                .padding()
         }
     }
 }
@@ -156,23 +168,3 @@ struct SafariView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }
 
-// MARK: - Corner Radius Extension
-extension View {
-    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
-    }
-}
-
-struct RoundedCorner: Shape {
-    var radius: CGFloat = .infinity
-    var corners: UIRectCorner = .allCorners
-
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        return Path(path.cgPath)
-    }
-}

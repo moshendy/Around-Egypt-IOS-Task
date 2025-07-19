@@ -21,7 +21,7 @@ class ExperienceCacheManager {
                     name: $0.cityName ?? "",
                     topPick: Int($0.cityTopPick)
                 ) : nil
-                return Experience(id: $0.id ?? "", title: $0.title ?? "", coverPhoto: $0.coverPhoto ?? "", description: "", viewsNo: Int($0.viewsNo), likesNo: Int($0.likesNo), recommended: Int($0.recommended), hasVideo: 0, city: city, tourHTML: $0.tourHTML ?? "", detailedDescription: "", address: "")
+                return Experience(id: $0.id ?? "", title: $0.title ?? "", coverPhoto: $0.coverPhoto ?? "", description: "", viewsNo: Int($0.viewsNo), likesNo: Int($0.likesNo), recommended: Int($0.recommended), hasVideo: 0, city: city, tourHTML: $0.tourHTML ?? "", detailedDescription: $0.detailedDescription ?? "", address: "")
             }
         } catch {
             print("Failed to fetch cached articles: \(error)")
@@ -47,6 +47,7 @@ class ExperienceCacheManager {
             entity.likesNo = Int64(experience.likesNo)
             entity.recommended = Int16(experience.recommended)
             entity.tourHTML = experience.tourHTML
+            entity.detailedDescription = experience.detailedDescription
             entity.cityID = Int16(experience.city?.id ?? 0)
             entity.cityName = experience.city?.name
             entity.cityTopPick = Int16(experience.city?.topPick ?? 0)

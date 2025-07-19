@@ -26,9 +26,15 @@ class ExperiencesViewModel: ObservableObject {
     private let cache = ExperienceCacheManager()
     private let network = APIService.shared
     private let likedKey = "likedExperienceIDs"
-    private var likedExperienceIDs: Set<String> {
-        get { Set(UserDefaults.standard.stringArray(forKey: likedKey) ?? []) }
-        set { UserDefaults.standard.set(Array(newValue), forKey: likedKey) }
+    // Public getter for outside use
+    var likedExperienceIDs: Set<String> {
+        Set(UserDefaults.standard.stringArray(forKey: likedKey) ?? [])
+    }
+    // Private method to update liked IDs
+    private func addLikedExperienceID(_ id: String) {
+        var liked = likedExperienceIDs
+        liked.insert(id)
+        UserDefaults.standard.set(Array(liked), forKey: likedKey)
     }
 
     private func applyLikedState(to experiences: [Experience]) -> [Experience] {
@@ -118,17 +124,13 @@ class ExperiencesViewModel: ObservableObject {
             if let idx = experiences.firstIndex(where: { $0.id == experience.id }) {
                 experiences[idx].likesNo = newLikes
                 experiences[idx].isLiked = true
-                var liked = likedExperienceIDs
-                liked.insert(experience.id)
-                likedExperienceIDs = liked
+                addLikedExperienceID(experience.id)
             }
             // Update in recommended
             if let idx = recommended.firstIndex(where: { $0.id == experience.id }) {
                 recommended[idx].likesNo = newLikes
                 recommended[idx].isLiked = true
-                var liked = likedExperienceIDs
-                liked.insert(experience.id)
-                likedExperienceIDs = liked
+                addLikedExperienceID(experience.id)
             }
         } catch {
             print("Failed to like experience:", error)

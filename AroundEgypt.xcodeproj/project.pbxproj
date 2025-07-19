@@ -11,14 +11,43 @@
 		FA016D232E29CE0400A85889 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FA016D222E29CE0400A85889 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		FACA5B572E2BF23C008A9801 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA016CFC2E29C94D00A85889 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA016D032E29C94D00A85889;
+			remoteInfo = AroundEgypt;
+		};
+		FACA5B662E2BF26A008A9801 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA016CFC2E29C94D00A85889 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FA016D032E29C94D00A85889;
+			remoteInfo = AroundEgypt;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		FA016D042E29C94D00A85889 /* AroundEgypt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AroundEgypt.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FACA5B532E2BF23B008A9801 /* AroundEgyptTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AroundEgyptTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FACA5B602E2BF26A008A9801 /* AroundEgyptUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AroundEgyptUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FA016D062E29C94D00A85889 /* AroundEgypt */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = AroundEgypt;
+			sourceTree = "<group>";
+		};
+		FACA5B542E2BF23C008A9801 /* AroundEgyptTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AroundEgyptTests;
+			sourceTree = "<group>";
+		};
+		FACA5B612E2BF26A008A9801 /* AroundEgyptUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AroundEgyptUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +62,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FACA5B502E2BF23B008A9801 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FACA5B5D2E2BF26A008A9801 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -40,6 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				FA016D062E29C94D00A85889 /* AroundEgypt */,
+				FACA5B542E2BF23C008A9801 /* AroundEgyptTests */,
+				FACA5B612E2BF26A008A9801 /* AroundEgyptUITests */,
 				FA016D052E29C94D00A85889 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -48,6 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				FA016D042E29C94D00A85889 /* AroundEgypt.app */,
+				FACA5B532E2BF23B008A9801 /* AroundEgyptTests.xctest */,
+				FACA5B602E2BF26A008A9801 /* AroundEgyptUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -80,6 +127,52 @@
 			productReference = FA016D042E29C94D00A85889 /* AroundEgypt.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FACA5B522E2BF23B008A9801 /* AroundEgyptTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FACA5B592E2BF23C008A9801 /* Build configuration list for PBXNativeTarget "AroundEgyptTests" */;
+			buildPhases = (
+				FACA5B4F2E2BF23B008A9801 /* Sources */,
+				FACA5B502E2BF23B008A9801 /* Frameworks */,
+				FACA5B512E2BF23B008A9801 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FACA5B582E2BF23C008A9801 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FACA5B542E2BF23C008A9801 /* AroundEgyptTests */,
+			);
+			name = AroundEgyptTests;
+			packageProductDependencies = (
+			);
+			productName = AroundEgyptTests;
+			productReference = FACA5B532E2BF23B008A9801 /* AroundEgyptTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FACA5B5F2E2BF26A008A9801 /* AroundEgyptUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FACA5B682E2BF26A008A9801 /* Build configuration list for PBXNativeTarget "AroundEgyptUITests" */;
+			buildPhases = (
+				FACA5B5C2E2BF26A008A9801 /* Sources */,
+				FACA5B5D2E2BF26A008A9801 /* Frameworks */,
+				FACA5B5E2E2BF26A008A9801 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FACA5B672E2BF26A008A9801 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FACA5B612E2BF26A008A9801 /* AroundEgyptUITests */,
+			);
+			name = AroundEgyptUITests;
+			packageProductDependencies = (
+			);
+			productName = AroundEgyptUITests;
+			productReference = FACA5B602E2BF26A008A9801 /* AroundEgyptUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -92,6 +185,14 @@
 				TargetAttributes = {
 					FA016D032E29C94D00A85889 = {
 						CreatedOnToolsVersion = 16.4;
+					};
+					FACA5B522E2BF23B008A9801 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = FA016D032E29C94D00A85889;
+					};
+					FACA5B5F2E2BF26A008A9801 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = FA016D032E29C94D00A85889;
 					};
 				};
 			};
@@ -114,12 +215,28 @@
 			projectRoot = "";
 			targets = (
 				FA016D032E29C94D00A85889 /* AroundEgypt */,
+				FACA5B522E2BF23B008A9801 /* AroundEgyptTests */,
+				FACA5B5F2E2BF26A008A9801 /* AroundEgyptUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		FA016D022E29C94D00A85889 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FACA5B512E2BF23B008A9801 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FACA5B5E2E2BF26A008A9801 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -158,7 +275,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FACA5B4F2E2BF23B008A9801 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FACA5B5C2E2BF26A008A9801 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FACA5B582E2BF23C008A9801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA016D032E29C94D00A85889 /* AroundEgypt */;
+			targetProxy = FACA5B572E2BF23C008A9801 /* PBXContainerItemProxy */;
+		};
+		FACA5B672E2BF26A008A9801 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FA016D032E29C94D00A85889 /* AroundEgypt */;
+			targetProxy = FACA5B662E2BF26A008A9801 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		FA016D0D2E29C94F00A85889 /* Debug */ = {
@@ -338,6 +482,76 @@
 			};
 			name = Release;
 		};
+		FACA5B5A2E2BF23C008A9801 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RB6R56A4H5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mShendy.AroundEgyptTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AroundEgypt.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AroundEgypt";
+			};
+			name = Debug;
+		};
+		FACA5B5B2E2BF23C008A9801 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RB6R56A4H5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mShendy.AroundEgyptTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AroundEgypt.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AroundEgypt";
+			};
+			name = Release;
+		};
+		FACA5B692E2BF26A008A9801 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RB6R56A4H5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mShendy.AroundEgyptUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AroundEgypt;
+			};
+			name = Debug;
+		};
+		FACA5B6A2E2BF26A008A9801 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RB6R56A4H5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mShendy.AroundEgyptUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = AroundEgypt;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -355,6 +569,24 @@
 			buildConfigurations = (
 				FA016D102E29C94F00A85889 /* Debug */,
 				FA016D112E29C94F00A85889 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FACA5B592E2BF23C008A9801 /* Build configuration list for PBXNativeTarget "AroundEgyptTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FACA5B5A2E2BF23C008A9801 /* Debug */,
+				FACA5B5B2E2BF23C008A9801 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FACA5B682E2BF26A008A9801 /* Build configuration list for PBXNativeTarget "AroundEgyptUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FACA5B692E2BF26A008A9801 /* Debug */,
+				FACA5B6A2E2BF26A008A9801 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

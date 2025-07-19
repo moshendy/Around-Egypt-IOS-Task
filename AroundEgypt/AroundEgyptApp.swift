@@ -9,9 +9,20 @@ import SwiftUI
 
 @main
 struct AroundEgyptApp: App {
+    @State private var showSplash = true
+
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            if showSplash {
+                SplashScreen()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            showSplash = false
+                        }
+                    }
+            } else {
+                HomeView()
+            }
         }
     }
 }

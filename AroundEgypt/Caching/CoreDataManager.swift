@@ -16,7 +16,12 @@ class ExperienceCacheManager {
         do {
             let entities = try context.fetch(request)
             return entities.map {
-                Experience(id: $0.id ?? "", title: $0.title ?? "", coverPhoto: $0.coverPhoto ?? "", description: "", viewsNo: Int($0.viewsNo), likesNo: Int($0.likesNo), recommended: Int($0.recommended), hasVideo: 0, city: nil, tourHTML: "", detailedDescription: "", address: "")
+                let city: City? = ($0.cityName != nil) ? City(
+                    id: Int($0.cityID),
+                    name: $0.cityName ?? "",
+                    topPick: Int($0.cityTopPick)
+                ) : nil
+                return Experience(id: $0.id ?? "", title: $0.title ?? "", coverPhoto: $0.coverPhoto ?? "", description: "", viewsNo: Int($0.viewsNo), likesNo: Int($0.likesNo), recommended: Int($0.recommended), hasVideo: 0, city: city, tourHTML: $0.tourHTML ?? "", detailedDescription: "", address: "")
             }
         } catch {
             print("Failed to fetch cached articles: \(error)")
@@ -24,15 +29,15 @@ class ExperienceCacheManager {
         }
     }
 
-    func saveExperiences(_ experience: [Experience]) {
+    func saveExperiences(_ articles: [Experience]) {
         // Clear only non-recommended (recent) cache first
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = ExperienceEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "recommended == 0")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         try? context.execute(deleteRequest)
 
-        // Insert new experience
-        for (index, experience) in experience.enumerated() {
+        // Insert new articles
+        for (index, experience) in articles.enumerated() {
             let entity = ExperienceEntity(context: context)
             entity.id = experience.id
             entity.title = experience.title
@@ -41,8 +46,11 @@ class ExperienceCacheManager {
             entity.viewsNo = Int64(experience.viewsNo)
             entity.likesNo = Int64(experience.likesNo)
             entity.recommended = Int16(experience.recommended)
+            entity.tourHTML = experience.tourHTML
+            entity.cityID = Int16(experience.city?.id ?? 0)
+            entity.cityName = experience.city?.name
+            entity.cityTopPick = Int16(experience.city?.topPick ?? 0)
         }
-
         CoreDataStack.shared.saveContext()
     }
 
@@ -53,7 +61,12 @@ class ExperienceCacheManager {
         do {
             let entities = try context.fetch(request)
             return entities.map {
-                Experience(id: $0.id ?? "", title: $0.title ?? "", coverPhoto: $0.coverPhoto ?? "", description: "", viewsNo: Int($0.viewsNo), likesNo: Int($0.likesNo), recommended: Int($0.recommended), hasVideo: 0, city: nil, tourHTML: "", detailedDescription: "", address: "")
+                let city: City? = ($0.cityName != nil) ? City(
+                    id: Int($0.cityID),
+                    name: $0.cityName ?? "",
+                    topPick: Int($0.cityTopPick)
+                ) : nil
+                return Experience(id: $0.id ?? "", title: $0.title ?? "", coverPhoto: $0.coverPhoto ?? "", description: "", viewsNo: Int($0.viewsNo), likesNo: Int($0.likesNo), recommended: Int($0.recommended), hasVideo: 0, city: city, tourHTML: $0.tourHTML ?? "", detailedDescription: "", address: "")
             }
         } catch {
             print("Failed to fetch cached recommended experiences: \(error)")
@@ -78,6 +91,10 @@ class ExperienceCacheManager {
             entity.viewsNo = Int64(experience.viewsNo)
             entity.likesNo = Int64(experience.likesNo)
             entity.recommended = Int16(experience.recommended)
+            entity.tourHTML = experience.tourHTML
+            entity.cityID = Int16(experience.city?.id ?? 0)
+            entity.cityName = experience.city?.name
+            entity.cityTopPick = Int16(experience.city?.topPick ?? 0)
         }
         CoreDataStack.shared.saveContext()
     }

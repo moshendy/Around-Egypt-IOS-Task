@@ -79,12 +79,12 @@ class APIService {
         return try await fetchExperiences(from: url)
     }
     
-//    func fetchSingleExperience(id: Int) async throws -> Experience {
-//        let url = baseURL + "/api/v2/experiences/\(id)"
-//        let response = try await AF.request(url)
-//            .serializingDecodable(APIResponse<Experience>.self).value
-//        return response.data
-//    }
+    func fetchSingleExperience(id: String) async throws -> Experience {
+        let url = baseURL + "/api/v2/experiences/\(id)"
+        let response = try await AF.request(url)
+            .serializingDecodable(APIResponse<Experience>.self).value
+        return response.data
+    }
     
     func likeExperience(id: String) async throws -> Int {
         let url = baseURL + "/api/v2/experiences/\(id)/like"

@@ -79,6 +79,37 @@ class ExperiencesViewModel: ObservableObject {
     }
 
     @MainActor
+    func searchExperiences(query: String) async {
+        isLoading = true
+        
+        if NetworkMonitor.shared.isConnected {
+            do {
+                let results = try await APIService.shared.searchExperiences(query: query)
+                self.experiences = applyLikedState(to: results)
+            } catch {
+                print("Search error:", error)
+            }
+        } else {
+            let cached = cache.fetchCachedExperiences()
+            self.experiences = applyLikedState(to: cached.filter { $0.title.localizedCaseInsensitiveContains(query) })
+        }
+        isLoading = false
+    }
+
+    func fetchExperienceDetails(id: String) async -> Experience? {
+        if NetworkMonitor.shared.isConnected {
+            do {
+                return try await APIService.shared.fetchSingleExperience(id: id)
+            } catch {
+                print("Failed to fetch details from API:", error)
+            }
+        }
+        // Fallback to cache
+        let cached = cache.fetchCachedExperiences()
+        return cached.first(where: { $0.id == id })
+    }
+
+    @MainActor
     func likeExperience(_ experience: Experience) async {
         guard !experience.isLiked else { return }
         do {

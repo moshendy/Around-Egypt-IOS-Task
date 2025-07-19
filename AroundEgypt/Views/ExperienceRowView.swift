@@ -23,21 +23,7 @@ struct ExperienceRow: View {
                     .clipped()
                     .cornerRadius(12)
 
-                if (experience.recommended != 0) {
-                    HStack {
-                        Image("recommended")
-                        
-                        Text("RECOMMENDED")
-                            .font(.caption)
-                            .bold()
-                            .padding(6)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(5)
-                            .padding(8)
-                        
-                    }
-                }
+              
 
                 VStack {
                     Spacer()

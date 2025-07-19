@@ -108,9 +108,15 @@ struct TopBarView: View {
                 
                 TextField("Try Luxor", text: $viewModel.searchText)
                     .submitLabel(.search)
+                    .onSubmit {
+                        Task { await viewModel.searchExperiences(query: viewModel.searchText) }
+                    }
                 
                 if !viewModel.searchText.isEmpty {
-                    Button(action: { viewModel.searchText = "" }) {
+                    Button(action: {
+                        viewModel.searchText = ""
+                        Task { await viewModel.loadPlaces() }
+                    }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.gray)
                     }

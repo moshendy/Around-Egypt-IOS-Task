@@ -12,57 +12,6 @@ class APIService {
     private let baseURL = "https://aroundegypt.34ml.com"
 
     private init() {}
-
-//    func fetchExperiences(from path: String) async throws -> [Experience] {
-//        let url = "\(baseURL)/api/v2/experiences"
-//
-//        return try await withCheckedThrowingContinuation { continuation in
-//            AF.request(url)
-//                .validate()
-//                .responseDecodable(of: [Experience].self) { response in
-//                    switch response.result {
-//                    case .success(let experiences):
-//                        continuation.resume(returning: experiences)
-//                    case .failure(let error):
-//                        continuation.resume(throwing: error)
-//                    }
-//                }
-//        }
-//    }
-//
-//    func fetchRecommendedxperience(id: Int) async throws -> [Experience] {
-//        let url = "\(baseURL)/api/v2/experiences?filter[recommended]=true)"
-//
-//        return try await withCheckedThrowingContinuation { continuation in
-//            AF.request(url)
-//                .validate()
-//                .responseDecodable(of: [Experience].self) { response in
-//                    switch response.result {
-//                    case .success(let experiences):
-//                        continuation.resume(returning: experiences)
-//                    case .failure(let error):
-//                        continuation.resume(throwing: error)
-//                    }
-//                }
-//        }
-//    }
-//
-//    func likeExperience(id: Int) async throws -> Experience {
-//        let url = "\(baseURL)/api/v2/experiences/\(id)/like"
-//
-//        return try await withCheckedThrowingContinuation { continuation in
-//            AF.request(url, method: .post)
-//                .validate()
-//                .responseDecodable(of: Experience.self) { response in
-//                    switch response.result {
-//                    case .success(let updatedExp):
-//                        continuation.resume(returning: updatedExp)
-//                    case .failure(let error):
-//                        continuation.resume(throwing: error)
-//                    }
-//                }
-//        }
-//    }
     
     func fetchRecommendedExperiences() async throws -> [Experience] {
         let url = baseURL + "/api/v2/experiences?filter[recommended]=true"

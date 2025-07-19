@@ -7,12 +7,6 @@
         
 import Foundation
 
-// MARK: - API Response
-struct APIResponse<T: Codable>: Codable {
-    let meta: Meta
-    let data: T
-    let pagination: Pagination
-}
 
 // MARK: - Experience
 struct Experience: Identifiable, Codable {
@@ -54,13 +48,4 @@ struct City: Codable {
 }
 
 
-// MARK: - Meta
-struct Meta: Codable {
-    let code: Int
-//    let errors: T
-}
-
-// MARK: - Pagination
-struct Pagination: Codable {
-}
 

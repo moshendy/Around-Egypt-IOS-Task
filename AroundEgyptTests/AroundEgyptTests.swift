@@ -36,7 +36,7 @@ class MockAPIService: APIServiceProtocol {
 }
 
 @MainActor
-final class AroundEgyptTests: XCTestCase {
+final class ExperiencesViewModelTests: XCTestCase {
     var viewModel: ExperiencesViewModel!
     var mockAPI: MockAPIService!
 
@@ -89,7 +89,8 @@ final class AroundEgyptTests: XCTestCase {
     func testLoadPlacesHandlesError() async {
         mockAPI.shouldThrow = true
         await viewModel.loadPlaces()
-        XCTAssertNotNil(viewModel.errorMessage)
+        XCTAssertNotNil(viewModel.error)
+        XCTAssertEqual(viewModel.error, .network)
     }
 
     func testLoadPlacesLoadsExperiences() async {
@@ -110,13 +111,14 @@ final class AroundEgyptTests: XCTestCase {
         await viewModel.searchExperiences(query: "Cairo")
         XCTAssertEqual(viewModel.experiences.count, 1)
         XCTAssertEqual(viewModel.experiences.first?.title, "Cairo Tower")
-        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertNil(viewModel.error)
     }
 
     func testSearchExperiencesAsyncError() async {
         mockAPI.shouldThrow = true
         await viewModel.searchExperiences(query: "Cairo")
-        XCTAssertNotNil(viewModel.errorMessage)
+        XCTAssertNotNil(viewModel.error)
+        XCTAssertEqual(viewModel.error, .network)
     }
 
     func testLikeExperienceErrorHandling() async {
@@ -124,7 +126,8 @@ final class AroundEgyptTests: XCTestCase {
         let exp = Experience(id: "1", title: "Pyramids", coverPhoto: "", description: "", viewsNo: 0, likesNo: 0, recommended: 0, hasVideo: 0, city: nil, tourHTML: "", detailedDescription: "", address: "")
         viewModel.experiences = [exp]
         await viewModel.likeExperience(exp)
-        XCTAssertNotNil(viewModel.errorMessage)
+        XCTAssertNotNil(viewModel.error)
+        XCTAssertEqual(viewModel.error, .like)
         // Should not be liked if error
         XCTAssertFalse(viewModel.experiences[0].isLiked)
     }
@@ -136,7 +139,7 @@ final class AroundEgyptTests: XCTestCase {
         let result = await viewModel.fetchExperienceDetails(id: "1")
         XCTAssertNotNil(result)
         XCTAssertEqual(result?.title, "Sphinx")
-        XCTAssertNil(viewModel.errorMessage)
+        XCTAssertNil(viewModel.error)
     }
 
     func testFetchExperienceDetailsError() async {
@@ -144,6 +147,7 @@ final class AroundEgyptTests: XCTestCase {
         mockAPI.experiences = [] // Clear the mock cache
         let result = await viewModel.fetchExperienceDetails(id: "1")
         XCTAssertNil(result)
-        XCTAssertNotNil(viewModel.errorMessage)
+        XCTAssertNotNil(viewModel.error)
+        XCTAssertEqual(viewModel.error, .details)
     }
 }

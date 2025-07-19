@@ -7,8 +7,12 @@
 import SwiftUI
 import Kingfisher
 
+/// A card view displaying a recommended experience with image, title, and like button.
+/// Used in the horizontal recommended experiences list on the Home screen.
 struct ExperienceCard: View {
+    /// The experience to display.
     let experience: Experience
+    /// The shared view model for experience actions.
     @EnvironmentObject var viewModel: ExperiencesViewModel
 
     var body: some View {

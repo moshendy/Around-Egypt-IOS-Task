@@ -76,6 +76,7 @@ struct DetailView: View {
                                     Text(experience.title.isEmpty ? "Unknown Title" : experience.title)
                                         .font(.title3)
                                         .bold()
+                                        .accessibilityIdentifier("detailTitle")
                                     if let city = experience.city?.name, !city.isEmpty {
                                         Text("\(city), Egypt.")
                                             .font(.subheadline)
@@ -106,13 +107,14 @@ struct DetailView: View {
                                         HStack(spacing: 4) {
                                             Text("\(experience.likesNo)")
                                                 .foregroundColor(.black)
-
+                                                .accessibilityIdentifier("likeCountLabel")
                                             Image(systemName: experience.isLiked ? "heart.fill" : "heart")
                                                 .font(.system(size: 14))
                                                 .foregroundColor(.orange)
                                         }
                                     }
                                     .disabled(experience.isLiked)
+                                    .accessibilityIdentifier("likeButton")
                                 }
                             }
                             Divider()
@@ -122,6 +124,7 @@ struct DetailView: View {
                                 .font(.body)
                                 .foregroundColor(.primary)
                                 .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityIdentifier("detailDescription")
                         }
                         .padding(.horizontal, 16)
                         .padding(.top, 16)
@@ -145,6 +148,10 @@ struct DetailView: View {
                         ActivityView(activityItems: [exp.title])
                     }
                 }
+            } else if viewModel.isLoading {
+                ProgressView()
+                    .transition(.opacity)
+                    .accessibilityIdentifier("detailLoadingIndicator")
             } else {
                 ProgressView()
                     .onAppear {

@@ -61,6 +61,7 @@ struct ExperienceRow: View {
                 .disabled(experience.isLiked)
             }
         }
+        .accessibilityIdentifier("experienceRow_\(experience.id)")
     }
 }
 

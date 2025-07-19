@@ -12,12 +12,11 @@ import Foundation
 class ExperiencesViewModel: ObservableObject {
     @Published var experiences: [Experience] = []
     @Published var recommended: [Experience] = []
-
     @Published var isLoading = false
     @Published var searchText: String = ""
+    @Published var errorMessage: String? = nil
     
     var isSearching: Bool { !searchText.isEmpty }
-
     var filteredExperiences: [Experience] {
         if searchText.isEmpty {
             return experiences
@@ -25,11 +24,14 @@ class ExperiencesViewModel: ObservableObject {
             return experiences.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
         }
     }
-    
 
     private let cache = ExperienceCacheManager()
-    private let network = APIService.shared
+    private let api: APIServiceProtocol
     private let likedKey = "likedExperienceIDs"
+
+    init(api: APIServiceProtocol = APIService.shared) {
+        self.api = api
+    }
     
     // Public getter for outside use
     var likedExperienceIDs: Set<String> {
@@ -55,17 +57,19 @@ class ExperiencesViewModel: ObservableObject {
         isLoading = true
         if NetworkMonitor.shared.isConnected {
             do {
-                let experiences = try await APIService.shared.fetchRecentExperiences()
+                let experiences = try await api.fetchRecentExperiences()
                 let withLiked = applyLikedState(to: experiences)
                 self.experiences = withLiked
                 self.cache.saveExperiences(withLiked)
             } catch {
-                print("Recommended error:", error)
+                self.errorMessage = "Failed to load recent experiences. Please try again."
             }
         } else {
-            // Load from cache if offline
             let cached = cache.fetchCachedExperiences()
             self.experiences = applyLikedState(to: cached)
+            if cached.isEmpty {
+                self.errorMessage = "No cached experiences available offline."
+            }
         }
         isLoading = false
     }
@@ -74,17 +78,19 @@ class ExperiencesViewModel: ObservableObject {
         isLoading = true
         if NetworkMonitor.shared.isConnected {
             do {
-                let recs = try await APIService.shared.fetchRecommendedExperiences()
+                let recs = try await api.fetchRecommendedExperiences()
                 let withLiked = applyLikedState(to: recs)
                 self.recommended = withLiked
                 self.cache.saveRecommendedExperiences(withLiked)
             } catch {
-                print("Failed to load recommended experiences:", error)
+                self.errorMessage = "Failed to load recommended experiences. Please try again."
             }
         } else {
-            // Load from cache if offline
             let cached = cache.fetchCachedRecommendedExperiences()
             self.recommended = applyLikedState(to: cached)
+            if cached.isEmpty {
+                self.errorMessage = "No cached recommended experiences available offline."
+            }
         }
         isLoading = false
     }
@@ -92,17 +98,23 @@ class ExperiencesViewModel: ObservableObject {
     @MainActor
     func searchExperiences(query: String) async {
         isLoading = true
-        
         if NetworkMonitor.shared.isConnected {
             do {
-                let results = try await APIService.shared.searchExperiences(query: query)
+                let results = try await api.searchExperiences(query: query)
                 self.experiences = applyLikedState(to: results)
+                if results.isEmpty {
+                    self.errorMessage = "No experiences found for your search."
+                }
             } catch {
-                print("Search error:", error)
+                self.errorMessage = "Failed to search experiences. Please try again."
             }
         } else {
             let cached = cache.fetchCachedExperiences()
-            self.experiences = applyLikedState(to: cached.filter { $0.title.localizedCaseInsensitiveContains(query) })
+            let filtered = cached.filter { $0.title.localizedCaseInsensitiveContains(query) }
+            self.experiences = applyLikedState(to: filtered)
+            if filtered.isEmpty {
+                self.errorMessage = "No cached experiences found for your search."
+            }
         }
         isLoading = false
     }
@@ -110,36 +122,40 @@ class ExperiencesViewModel: ObservableObject {
     func fetchExperienceDetails(id: String) async -> Experience? {
         if NetworkMonitor.shared.isConnected {
             do {
-                return try await APIService.shared.fetchSingleExperience(id: id)
+                return try await api.fetchSingleExperience(id: id)
             } catch {
-                print("Failed to fetch details from API:", error)
+                self.errorMessage = "Failed to load experience details. Please try again."
             }
         }
-        // Fallback to cache
         let cached = cache.fetchCachedExperiences()
-        return cached.first(where: { $0.id == id })
+        let exp = cached.first(where: { $0.id == id })
+        if exp == nil {
+            self.errorMessage = "No cached details available for this experience."
+        }
+        return exp
     }
 
     @MainActor
     func likeExperience(_ experience: Experience) async {
         guard !experience.isLiked else { return }
         do {
-            let newLikes = try await APIService.shared.likeExperience(id: experience.id)
-            // Update in experiences
+            let newLikes = try await api.likeExperience(id: experience.id)
             if let idx = experiences.firstIndex(where: { $0.id == experience.id }) {
                 experiences[idx].likesNo = newLikes
                 experiences[idx].isLiked = true
                 addLikedExperienceID(experience.id)
             }
-            // Update in recommended
             if let idx = recommended.firstIndex(where: { $0.id == experience.id }) {
                 recommended[idx].likesNo = newLikes
                 recommended[idx].isLiked = true
                 addLikedExperienceID(experience.id)
             }
         } catch {
-            print("Failed to like experience:", error)
+            self.errorMessage = "Failed to like experience. Please try again."
         }
+    }
+    func clearError() {
+        self.errorMessage = nil
     }
 }
 

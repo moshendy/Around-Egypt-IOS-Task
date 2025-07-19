@@ -25,6 +25,7 @@ struct HomeView: View {
                     .foregroundColor(.white)
                     .font(.caption)
                     .transition(.move(edge: .top))
+                    .accessibilityIdentifier("offlineBanner")
             }
             
             if showReconnectedBanner {
@@ -72,6 +73,7 @@ struct HomeView: View {
                     
                     if viewModel.isLoading {
                         ProgressView()
+                            .accessibilityIdentifier("homeLoadingIndicator")
                     }
                 }
             }
@@ -107,6 +109,7 @@ struct TopBarView: View {
                     .foregroundColor(.secondary)
                 
                 TextField("Try Luxor", text: $viewModel.searchText)
+                    .accessibilityIdentifier("searchTextField")
                     .submitLabel(.search)
                     .onSubmit {
                         Task { await viewModel.searchExperiences(query: viewModel.searchText) }
@@ -120,6 +123,7 @@ struct TopBarView: View {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.gray)
                     }
+                    .accessibilityIdentifier("clearSearchButton")
                 }
             }
             .padding(.horizontal, 12)
@@ -163,6 +167,7 @@ struct RecommendedSection: View {
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.primary)
                 .padding(.horizontal, 16)
+                .accessibilityIdentifier("recommendedSection")
             
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack(spacing: 16) {
@@ -184,6 +189,7 @@ struct MostRecentHeader: View {
         Text("Most Recent")
             .font(.system(size: 22, weight: .bold))
             .foregroundColor(.primary)
+            .accessibilityIdentifier("mostRecentHeader")
     }
 }
 

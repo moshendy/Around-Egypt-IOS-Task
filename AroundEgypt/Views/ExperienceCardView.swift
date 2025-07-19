@@ -108,5 +108,6 @@ struct ExperienceCard: View {
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
         .padding(.vertical, 4)
+        .accessibilityIdentifier("experienceCard_\(experience.id)")
     }
 }

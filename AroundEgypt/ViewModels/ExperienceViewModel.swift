@@ -60,12 +60,12 @@ class ExperiencesViewModel: ObservableObject {
                 let experiences = try await api.fetchRecentExperiences()
                 let withLiked = applyLikedState(to: experiences)
                 self.experiences = withLiked
-                self.cache.saveExperiences(withLiked)
+                self.cache.saveExperiences(withLiked,"recommended == 0")
             } catch {
                 self.errorMessage = "Failed to load recent experiences. Please try again."
             }
         } else {
-            let cached = cache.fetchCachedExperiences()
+            let cached = cache.fetchCachedExperiences("")
             self.experiences = applyLikedState(to: cached)
             if cached.isEmpty {
                 self.errorMessage = "No cached experiences available offline."
@@ -81,12 +81,12 @@ class ExperiencesViewModel: ObservableObject {
                 let recs = try await api.fetchRecommendedExperiences()
                 let withLiked = applyLikedState(to: recs)
                 self.recommended = withLiked
-                self.cache.saveRecommendedExperiences(withLiked)
+                self.cache.saveExperiences(withLiked, "recommended != 0")
             } catch {
                 self.errorMessage = "Failed to load recommended experiences. Please try again."
             }
         } else {
-            let cached = cache.fetchCachedRecommendedExperiences()
+            let cached = cache.fetchCachedExperiences("recommended != 0")
             self.recommended = applyLikedState(to: cached)
             if cached.isEmpty {
                 self.errorMessage = "No cached recommended experiences available offline."
@@ -109,7 +109,7 @@ class ExperiencesViewModel: ObservableObject {
                 self.errorMessage = "Failed to search experiences. Please try again."
             }
         } else {
-            let cached = cache.fetchCachedExperiences()
+            let cached = cache.fetchCachedExperiences("")
             let filtered = cached.filter { $0.title.localizedCaseInsensitiveContains(query) }
             self.experiences = applyLikedState(to: filtered)
             if filtered.isEmpty {
@@ -127,7 +127,7 @@ class ExperiencesViewModel: ObservableObject {
                 self.errorMessage = "Failed to load experience details. Please try again."
             }
         }
-        let cached = cache.fetchCachedExperiences()
+        let cached = cache.fetchCachedExperiences("")
         let exp = cached.first(where: { $0.id == id })
         if exp == nil {
             self.errorMessage = "No cached details available for this experience."

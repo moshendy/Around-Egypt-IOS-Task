@@ -106,7 +106,7 @@ struct DetailView: View {
                                     }) {
                                         HStack(spacing: 4) {
                                             Text("\(experience.likesNo)")
-                                                .foregroundColor(.black)
+                                                .foregroundColor(.primary)
                                                 .accessibilityIdentifier("likeCountLabel")
                                             Image(systemName: experience.isLiked ? "heart.fill" : "heart")
                                                 .font(.system(size: 14))

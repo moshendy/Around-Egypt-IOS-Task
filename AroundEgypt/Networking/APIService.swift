@@ -7,7 +7,15 @@
 
 import Alamofire
 
-class APIService {
+protocol APIServiceProtocol {
+    func fetchRecommendedExperiences() async throws -> [Experience]
+    func fetchRecentExperiences() async throws -> [Experience]
+    func searchExperiences(query: String) async throws -> [Experience]
+    func fetchSingleExperience(id: String) async throws -> Experience
+    func likeExperience(id: String) async throws -> Int
+}
+
+class APIService: APIServiceProtocol {
     static let shared = APIService()
     private let baseURL = "https://aroundegypt.34ml.com"
 

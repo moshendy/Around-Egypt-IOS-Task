@@ -93,6 +93,7 @@ struct ExperienceCard: View {
                 }) {
                     HStack(spacing: 4) {
                         Text("\(experience.likesNo)")
+                            .foregroundColor(.black)
                         Image(systemName: experience.isLiked ? "heart.fill" : "heart")
                             .font(.system(size: 16))
                             .foregroundColor(experience.isLiked ? .orange : .gray)

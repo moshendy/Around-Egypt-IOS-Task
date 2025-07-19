@@ -7,8 +7,12 @@
 import SwiftUI
 import Kingfisher
 
+/// A card view displaying a recommended experience with image, title, and like button.
+/// Used in the horizontal recommended experiences list on the Home screen.
 struct ExperienceCard: View {
+    /// The experience to display.
     let experience: Experience
+    /// The shared view model for experience actions.
     @EnvironmentObject var viewModel: ExperiencesViewModel
 
     var body: some View {
@@ -93,7 +97,7 @@ struct ExperienceCard: View {
                 }) {
                     HStack(spacing: 4) {
                         Text("\(experience.likesNo)")
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                         Image(systemName: experience.isLiked ? "heart.fill" : "heart")
                             .font(.system(size: 16))
                             .foregroundColor(experience.isLiked ? .orange : .gray)
@@ -104,7 +108,6 @@ struct ExperienceCard: View {
             .padding(.horizontal, 8)
             .padding(.vertical, 8)
         }
-        .background(Color.white)
         .cornerRadius(16)
         .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
         .padding(.vertical, 4)

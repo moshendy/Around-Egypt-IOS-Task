@@ -35,6 +35,27 @@ struct Experience: Identifiable, Codable {
     }
 }
 
+extension Experience {
+    init(entity: ExperienceEntity) {
+        self.id = entity.id ?? ""
+        self.title = entity.title ?? ""
+        self.coverPhoto = entity.coverPhoto ?? ""
+        self.description = "" // Not stored in entity
+        self.viewsNo = Int(entity.viewsNo)
+        self.likesNo = Int(entity.likesNo)
+        self.recommended = Int(entity.recommended)
+        self.hasVideo = 0 // Not stored in entity
+        if let cityName = entity.cityName {
+            self.city = City(id: Int(entity.cityID), name: cityName, topPick: Int(entity.cityTopPick))
+        } else {
+            self.city = nil
+        }
+        self.tourHTML = entity.tourHTML ?? ""
+        self.detailedDescription = entity.detailedDescription ?? ""
+        self.address = "" // Not stored in entity
+    }
+}
+
 // MARK: - City
 struct City: Codable {
     let id: Int

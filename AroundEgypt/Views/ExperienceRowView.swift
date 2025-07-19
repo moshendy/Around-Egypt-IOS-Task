@@ -9,8 +9,12 @@
 import SwiftUI
 import Kingfisher
 
+/// A row view displaying a recent experience with image, title, views, and like button.
+/// Used in the vertical recent experiences list on the Home screen.
 struct ExperienceRow: View {
+    /// The experience to display.
     let experience: Experience
+    /// The shared view model for experience actions.
     @EnvironmentObject var viewModel: ExperiencesViewModel
 
     var body: some View {
@@ -57,6 +61,10 @@ struct ExperienceRow: View {
                             .font(.system(size: 14))
                             .foregroundColor(experience.isLiked ? .orange : .gray)
                     }
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .frame(minHeight: 44)
+                    
                 }
                 .disabled(experience.isLiked)
             }

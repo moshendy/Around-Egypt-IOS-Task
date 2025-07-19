@@ -7,12 +7,19 @@
 import SwiftUI
 import Kingfisher
 
+/// A sheet view displaying the details of a selected experience, including image, title, description, and like/share actions.
 struct DetailView: View {
+    /// The ID of the experience to display.
     let experienceID: String
+    /// The shared view model for data and actions.
     @EnvironmentObject var viewModel: ExperiencesViewModel
+    /// The presentation mode environment value.
     @Environment(\.presentationMode) var presentationMode
+    /// State for showing the virtual tour.
     @State private var showTour: Bool = false
+    /// The loaded experience details.
     @State private var loadedExperience: Experience? = nil
+    /// State for showing the share sheet.
     @State private var showShareSheet = false
 
     var body: some View {
@@ -174,9 +181,10 @@ struct DetailView: View {
     }
 }
 
-// SafariView for opening virtual tour links
+/// A wrapper for displaying a URL in a Safari view controller.
 import SafariServices
 struct SafariView: UIViewControllerRepresentable {
+    /// The URL to display.
     let url: URL
     func makeUIViewController(context: Context) -> SFSafariViewController {
         SFSafariViewController(url: url)
@@ -184,8 +192,10 @@ struct SafariView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }
 
+/// A wrapper for displaying a share sheet with activity items.
 import UIKit
 struct ActivityView: UIViewControllerRepresentable {
+    /// The items to share.
     let activityItems: [Any]
     func makeUIViewController(context: Context) -> UIActivityViewController {
         UIActivityViewController(activityItems: activityItems, applicationActivities: nil)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// The main home screen view displaying banners, search, recommended and recent experiences.
 struct HomeView: View {
     @StateObject private var viewModel = ExperiencesViewModel()
     @ObservedObject private var networkMonitor = NetworkMonitor.shared
@@ -93,7 +94,9 @@ struct HomeView: View {
     }
 }
 
+/// The top bar with menu, search, and scanner buttons.
 struct TopBarView: View {
+    /// The shared view model for search and actions.
     @ObservedObject var viewModel: ExperiencesViewModel
     
     var body: some View {
@@ -142,6 +145,7 @@ struct TopBarView: View {
     }
 }
 
+/// A welcome message section at the top of the home screen.
 struct WelcomeSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -157,8 +161,11 @@ struct WelcomeSection: View {
     }
 }
 
+/// The horizontally scrolling recommended experiences section.
 struct RecommendedSection: View {
+    /// The shared view model for data and actions.
     @ObservedObject var viewModel: ExperiencesViewModel
+    /// The selected experience binding for sheet presentation.
     @Binding var selectedExperience: Experience?
     
     var body: some View {
@@ -184,6 +191,7 @@ struct RecommendedSection: View {
     }
 }
 
+/// The header for the most recent experiences list.
 struct MostRecentHeader: View {
     var body: some View {
         Text("Most Recent")
@@ -193,8 +201,11 @@ struct MostRecentHeader: View {
     }
 }
 
+/// The vertically scrolling recent experiences section.
 struct RecentSection: View {
+    /// The shared view model for data and actions.
     @ObservedObject var viewModel: ExperiencesViewModel
+    /// The selected experience binding for sheet presentation.
     @Binding var selectedExperience: Experience?
     var body: some View {
         LazyVStack(spacing: 8) {

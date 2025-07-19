@@ -15,14 +15,15 @@ struct APIResponse<T: Codable>: Codable {
 }
 
 // MARK: - Experience
-struct Experience: Codable {
+struct Experience: Identifiable, Codable {
     let id, title: String
     let coverPhoto: String
     let description: String
-    let viewsNo, likesNo, recommended, hasVideo: Int
+    var viewsNo, likesNo, recommended, hasVideo: Int
     let city: City?
     let tourHTML: String
     let detailedDescription, address: String
+    var isLiked: Bool = false // Local-only, not Codable
 
     enum CodingKeys: String, CodingKey {
         case id, title

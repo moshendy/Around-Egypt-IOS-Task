@@ -86,17 +86,12 @@ class APIService {
 //        return response.data
 //    }
     
-//    func likeExperience(id: String) async throws -> Experience? {
-//        let url = baseURL + "/api/v2/experiences/\(id)/like"
-//        let response = try await AF.request(url, method: .post)
-//            .serializingDecodable(LikeResponse.self).value
-//        switch response.data {
-//        case .experience(let exp):
-//            return exp
-//        default:
-//            return nil
-//        }
-//    }
+    func likeExperience(id: String) async throws -> Int {
+        let url = baseURL + "/api/v2/experiences/\(id)/like"
+        let response = try await AF.request(url, method: .post)
+            .serializingDecodable(APIResponse<Int>.self).value
+        return response.data
+    }
     private func fetchExperiences(from urlString: String) async throws -> [Experience] {
         let response = try await AF.request(urlString)
             .serializingDecodable(APIResponse<[Experience]>.self).value

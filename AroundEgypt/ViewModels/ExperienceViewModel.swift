@@ -11,8 +11,13 @@ import Foundation
 @MainActor
 class ExperiencesViewModel: ObservableObject {
     @Published var experiences: [Experience] = []
+    @Published var recommended: [Experience] = []
+
     @Published var isLoading = false
     @Published var searchText: String = ""
+    
+    var isSearching: Bool { !searchText.isEmpty }
+
     var filteredExperiences: [Experience] {
         if searchText.isEmpty {
             return experiences
@@ -20,12 +25,12 @@ class ExperiencesViewModel: ObservableObject {
             return experiences.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
         }
     }
-    @Published var recommended: [Experience] = []
-    var isSearching: Bool { !searchText.isEmpty }
+    
 
     private let cache = ExperienceCacheManager()
     private let network = APIService.shared
     private let likedKey = "likedExperienceIDs"
+    
     // Public getter for outside use
     var likedExperienceIDs: Set<String> {
         Set(UserDefaults.standard.stringArray(forKey: likedKey) ?? [])

@@ -12,122 +12,100 @@ struct ExperienceCard: View {
     @EnvironmentObject var viewModel: ExperiencesViewModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            ZStack {
-                // Main image
+        VStack(alignment: .leading, spacing: 0) {
+            ZStack(alignment: .topLeading) {
                 KFImage(URL(string: experience.coverPhoto))
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 260, height: 160)
+                    .aspectRatio(16/9, contentMode: .fill)
+                    .frame(height: 160)
                     .clipped()
-                    .cornerRadius(12)
-
-                // Top overlay elements
-                VStack {
-                    HStack {
-                        // RECOMMENDED badge (only show if recommended)
-                        if experience.recommended != 0 {
-                            Text("RECOMMENDED")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(Color.blue)
-                                .cornerRadius(4)
-                        }
-                        
-                        Spacer()
-                        
-                        // Info button
-                        Button(action: {
-                            // Info action
-                        }) {
-                            Image(systemName: "info.circle")
-                                .font(.system(size: 20))
-                                .foregroundColor(.white)
-                                .background(Color.black.opacity(0.3))
-                                .clipShape(Circle())
-                        }
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.top, 8)
-                    
-                    Spacer()
-                }
-                
-                // Center 360° icon
-                ZStack {
-                    Circle()
-                        .stroke(Color.white, lineWidth: 2)
-                        .frame(width: 50, height: 50)
-                        .background(Color.black.opacity(0.3))
-                        .clipShape(Circle())
-                    
-                    Text("360°")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white)
-                }
-                
-                // Bottom stats overlay
-                VStack {
-                    Spacer()
-                    HStack {
-                        HStack(spacing: 4) {
-                            Image(systemName: "eye")
-                                .foregroundColor(.white)
-                                .font(.system(size: 12))
-                            Text("\(experience.viewsNo)")
-                                .foregroundColor(.white)
-                                .font(.system(size: 12, weight: .medium))
-                        }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.black.opacity(0.6))
-                        .cornerRadius(12)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "photo.on.rectangle.angled")
+                    .cornerRadius(16)
+                // RECOMMENDED badge with star
+                if experience.recommended != 0 {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.orange)
+                        Text("RECOMMENDED")
+                            .font(.caption2)
+                            .bold()
                             .foregroundColor(.white)
-                            .font(.system(size: 14))
-                            .padding(6)
-                            .background(Color.black.opacity(0.6))
-                            .cornerRadius(8)
                     }
-                    .padding(.horizontal, 12)
-                    .padding(.bottom, 12)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.85))
+                    .clipShape(Capsule())
+                    .padding(8)
+                }
+                // Info icon
+                HStack {
+                    Spacer()
+                    Button(action: { /* info action */ }) {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(.white)
+                            .background(Circle().fill(Color.black.opacity(0.4)).frame(width: 28, height: 28))
+                    }
+                    .padding(8)
+                }
+                // Centered 360 badge
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.85))
+                                .frame(width: 44, height: 44)
+                            Text("360°")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
+                    }
+                    Spacer()
+                }
+                // Bottom stats row
+                VStack {
+                    Spacer()
+                    HStack {
+                        Image(systemName: "eye")
+                        Text("\(experience.viewsNo)")
+                        Spacer()
+                        Image(systemName: "photo.on.rectangle.angled")
+                    }
+                    .font(.caption)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.black.opacity(0.4))
+                    .cornerRadius(8)
+                    .padding(8)
                 }
             }
-            .frame(width: 260, height: 160)
-
-            // Bottom content
+            // Title and likes row
             HStack {
                 Text(experience.title)
-                    .font(.subheadline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-                
+                    .font(.headline)
+                    .bold()
                 Spacer()
-                
-                // Like button with count
                 Button(action: {
                     Task { await viewModel.likeExperience(experience) }
                 }) {
                     HStack(spacing: 4) {
                         Text("\(experience.likesNo)")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(.primary)
-                        
                         Image(systemName: experience.isLiked ? "heart.fill" : "heart")
-                            .font(.system(size: 14))
-                            .foregroundColor(.orange)
-
+                            .font(.system(size: 16))
+                            .foregroundColor(experience.isLiked ? .orange : .gray)
                     }
                 }
                 .disabled(experience.isLiked)
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 8)
         }
-        .frame(width: 260)
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
+        .padding(.vertical, 4)
     }
 }

@@ -52,10 +52,10 @@ struct ExperienceRow: View {
                 }) {
                     HStack(spacing: 4) {
                         Text("\(experience.likesNo)")
+                            .foregroundColor(.black)
                         Image(systemName: experience.isLiked ? "heart.fill" : "heart")
                             .font(.system(size: 14))
-                            .foregroundColor(.orange)
-
+                            .foregroundColor(experience.isLiked ? .orange : .gray)
                     }
                 }
                 .disabled(experience.isLiked)

@@ -165,17 +165,15 @@ struct RecommendedSection: View {
                 .padding(.horizontal, 16)
             
             ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: 12) {
+                LazyHStack(spacing: 16) {
                     ForEach(viewModel.recommended, id: \.id) { exp in
-                        NavigationLink(destination: DetailView(experienceID: exp.id).environmentObject(viewModel)) {
-                            ExperienceCard(experience: exp)
-                                .onTapGesture { selectedExperience = exp }
-                                .environmentObject(viewModel)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        ExperienceCard(experience: exp)
+                            .frame(width: UIScreen.main.bounds.width * 0.85)
+                            .environmentObject(viewModel)
+                            .onTapGesture { selectedExperience = exp }
                     }
                 }
-                .padding(.horizontal, 16)
+                .padding(.leading, 16)
             }
         }
     }

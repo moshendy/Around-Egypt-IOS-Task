@@ -13,42 +13,44 @@ struct DetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var showTour: Bool = false
     @State private var loadedExperience: Experience? = nil
+    @State private var showShareSheet = false
 
     var body: some View {
         Group {
             if let experience = loadedExperience {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 0) {
-                        ZStack(alignment: .topTrailing) {
-                            ZStack {
-                                KFImage(URL(string: experience.coverPhoto))
-                                    .placeholder {
-                                        Color(.systemGray5)
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 260)
-                                    }
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 260)
-                                    .clipped()
-                                    .background(Color.white)
-                                    .ignoresSafeArea(edges: .top)
-
-                                if !experience.tourHTML.isEmpty {
-                                    Button(action: { showTour = true }) {
-                                        Text("EXPLORE NOW")
-                                            .font(.headline)
-                                            .padding(.vertical, 10)
-                                            .padding(.horizontal, 32)
-                                            .background(Color.white)
-                                            .foregroundColor(.orange)
-                                            .cornerRadius(12)
-                                            .shadow(radius: 4)
-                                    }
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        // Image and overlays
+                        ZStack(alignment: .bottom) {
+                            KFImage(URL(string: experience.coverPhoto))
+                                .placeholder {
+                                    Color(.systemGray5)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 260)
                                 }
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 260)
+                                .clipped()
+                                .background(Color.white)
+                                .ignoresSafeArea(edges: .top)
+
+                            // EXPLORE NOW button centered
+                            if !experience.tourHTML.isEmpty {
+                                Button(action: { showTour = true }) {
+                                    Text("EXPLORE NOW")
+                                        .font(.headline)
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 32)
+                                        .background(Color.white)
+                                        .foregroundColor(.orange)
+                                        .cornerRadius(12)
+                                        .shadow(radius: 4)
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                             }
+
                             // Stats row at the bottom
                             HStack {
                                 HStack(spacing: 4) {
@@ -65,10 +67,8 @@ struct DetailView: View {
                             .padding(.vertical, 8)
                             .background(Color.black.opacity(0.4))
                             .frame(maxWidth: .infinity)
-                            .offset(y: -24)
-                            
-                            
                         }
+                        .frame(height: 260)
 
                         VStack(alignment: .leading, spacing: 8) {
                             HStack(alignment: .top) {
@@ -89,7 +89,7 @@ struct DetailView: View {
                                 Spacer()
                                 HStack(spacing: 16) {
                                     Button(action: {
-                                        // Share action (implement if needed)
+                                        showShareSheet = true
                                     }) {
                                         Image(systemName: "square.and.arrow.up")
                                             .font(.title3)
@@ -105,6 +105,8 @@ struct DetailView: View {
                                     }) {
                                         HStack(spacing: 4) {
                                             Text("\(experience.likesNo)")
+                                                .foregroundColor(.black)
+
                                             Image(systemName: experience.isLiked ? "heart.fill" : "heart")
                                                 .font(.system(size: 14))
                                                 .foregroundColor(.orange)
@@ -134,6 +136,13 @@ struct DetailView: View {
                     } else {
                         Text("Invalid tour link")
                             .padding()
+                    }
+                }
+                .sheet(isPresented: $showShareSheet) {
+                    if let exp = loadedExperience, let url = URL(string: exp.tourHTML) {
+                        ActivityView(activityItems: [exp.title, url])
+                    } else if let exp = loadedExperience {
+                        ActivityView(activityItems: [exp.title])
                     }
                 }
             } else {
@@ -166,5 +175,14 @@ struct SafariView: UIViewControllerRepresentable {
         SFSafariViewController(url: url)
     }
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
+}
+
+import UIKit
+struct ActivityView: UIViewControllerRepresentable {
+    let activityItems: [Any]
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+    }
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 

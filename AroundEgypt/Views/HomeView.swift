@@ -48,17 +48,39 @@ struct HomeView: View {
                 ZStack {
                     ScrollView {
                         LazyVStack(alignment: .leading, spacing: 24) {
-                            if viewModel.searchText.isEmpty {
+                            // Hybrid search: show search results if searching, else show main feed
+                            if let results = viewModel.searchResults {
+                                if viewModel.isSearching {
+                                    ProgressView()
+                                        .accessibilityIdentifier("homeLoadingIndicator")
+                                } else if let error = viewModel.searchError {
+                                    Text(error.description)
+                                        .foregroundColor(.secondary)
+                                        .padding()
+                                        .accessibilityIdentifier("searchErrorLabel")
+                                } else if results.isEmpty {
+                                    Text("No experiences found for your search.")
+                                        .foregroundColor(.secondary)
+                                        .padding()
+                                        .accessibilityIdentifier("noResultsLabel")
+                                } else {
+                                    ForEach(results, id: \ .id) { exp in
+                                        ExperienceRow(experience: exp)
+                                            .onTapGesture { selectedExperience = exp }
+                                            .environmentObject(viewModel)
+                                            .padding(.horizontal, 16)
+
+                                    }
+                                }
+                            } else {
+                                // Not searching: show main feed
                                 WelcomeSection()
                                     .padding(.horizontal, 16)
-                                
                                 RecommendedSection(viewModel: viewModel, selectedExperience: $selectedExperience)
-                                
                                 MostRecentHeader()
                                     .padding(.horizontal, 16)
+                                RecentSection(viewModel: viewModel, selectedExperience: $selectedExperience)
                             }
-                            
-                            RecentSection(viewModel: viewModel, selectedExperience: $selectedExperience)
                         }
                         .padding(.top, 8)
                         .padding(.bottom, 16)
@@ -71,16 +93,11 @@ struct HomeView: View {
                             await viewModel.loadRecommended()
                         }
                     }
-                    
-                    if viewModel.isLoading {
-                        ProgressView()
-                            .accessibilityIdentifier("homeLoadingIndicator")
-                    }
                 }
-            }
-            .sheet(item: $selectedExperience) { exp in
-                DetailView(experienceID: exp.id)
-                    .environmentObject(viewModel)
+                .sheet(item: $selectedExperience) { exp in
+                    DetailView(experienceID: exp.id)
+                        .environmentObject(viewModel)
+                }
             }
         }
         .onChange(of: networkMonitor.isConnected) {
@@ -115,12 +132,13 @@ struct TopBarView: View {
                     .accessibilityIdentifier("searchTextField")
                     .submitLabel(.search)
                     .onSubmit {
-                        Task { await viewModel.searchExperiences(query: viewModel.searchText) }
+                        Task { await viewModel.submitSearch() }
                     }
                 
                 if !viewModel.searchText.isEmpty {
                     Button(action: {
                         viewModel.searchText = ""
+                        viewModel.searchResults = nil // Reset search results when clearing
                         Task { await viewModel.loadPlaces() }
                     }) {
                         Image(systemName: "xmark.circle.fill")
@@ -209,7 +227,7 @@ struct RecentSection: View {
     @Binding var selectedExperience: Experience?
     var body: some View {
         LazyVStack(spacing: 8) {
-            ForEach(viewModel.filteredExperiences, id: \.id) { exp in
+            ForEach(viewModel.experiences, id: \ .id) { exp in
                 ExperienceRow(experience: exp)
                     .onTapGesture {
                         selectedExperience = exp

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine // Added for Combine publishers
 
 
 /// ViewModel for managing experiences, recommended experiences, and related actions.
@@ -17,26 +18,21 @@ class ExperiencesViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var searchText: String = ""
     @Published var error: AppError? = nil
+    @Published var searchResults: [Experience]? = nil // nil = not searching, [] = no results
+    @Published var isSearching: Bool = false
+    @Published var searchError: AppError? = nil
     
     private let cache = ExperienceCacheManager()
     private let api: APIServiceProtocol
     private let likesService = LikesService()
+    private var cancellables = Set<AnyCancellable>() // Added for Combine publishers
     
     /// Initializes the ViewModel with an API service (default: APIService.shared).
     init(api: APIServiceProtocol = APIService.shared) {
         self.api = api
+        // Remove debounce and local filtering on searchText changes
     }
     
-    /// Returns true if the user is searching.
-    var isSearching: Bool { !searchText.isEmpty }
-    /// Returns the filtered experiences based on the search text.
-    var filteredExperiences: [Experience] {
-        if searchText.isEmpty {
-            return experiences
-        } else {
-            return experiences.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
-        }
-    }
     /// Returns the set of liked experience IDs.
     var likedExperienceIDs: Set<String> {
         likesService.likedExperienceIDs
@@ -44,6 +40,34 @@ class ExperiencesViewModel: ObservableObject {
     /// Adds an experience ID to the liked set.
     private func addLikedExperienceID(_ id: String) {
         likesService.addLikedExperienceID(id)
+    }
+    
+    /// Triggers a remote search for experiences by query, updating searchResults.
+    @MainActor
+    func submitSearch() async {
+        guard !searchText.isEmpty else { return }
+        isSearching = true
+        searchError = nil
+        defer { isSearching = false }
+        if NetworkMonitor.shared.isConnected {
+            do {
+                let results = try await api.searchExperiences(query: searchText)
+                self.searchResults = applyLikedState(to: results)
+                if results.isEmpty {
+                    self.searchError = .searchNoResults
+                }
+            } catch {
+                self.searchError = .network
+                self.searchResults = []
+            }
+        } else {
+            // Fallback to local filter (in-memory) if offline
+            let filtered = experiences.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+            self.searchResults = applyLikedState(to: filtered)
+            if filtered.isEmpty {
+                self.searchError = .searchNoResults
+            }
+        }
     }
     
     /// Loads recent experiences from the network or cache.
@@ -56,13 +80,13 @@ class ExperiencesViewModel: ObservableObject {
                 let experiences = try await api.fetchRecentExperiences()
                 let withLiked = applyLikedState(to: experiences)
                 self.experiences = withLiked
-                self.cache.saveExperiences(withLiked, "recommended == 0")
+                self.cache.saveExperiences(withLiked, "recommended >= 0")
             } catch {
                 self.error = .network
                 return
             }
         } else {
-            let cached = cache.fetchCachedExperiences("recommended == 0")
+            let cached = cache.fetchCachedExperiences("recommended >= 0")
             self.experiences = applyLikedState(to: cached)
             if cached.isEmpty {
                 self.error = .noCache
@@ -91,35 +115,6 @@ class ExperiencesViewModel: ObservableObject {
             self.recommended = applyLikedState(to: cached)
             if cached.isEmpty {
                 self.error = .noCache
-                return
-            }
-        }
-    }
-    
-    /// Searches experiences by query, using network or cache.
-    /// Sets error if search fails or no results are found.
-    @MainActor
-    func searchExperiences(query: String) async {
-        isLoading = true
-        defer { isLoading = false }
-        if NetworkMonitor.shared.isConnected {
-            do {
-                let results = try await api.searchExperiences(query: query)
-                self.experiences = applyLikedState(to: results)
-                if results.isEmpty {
-                    self.error = .searchNoResults
-                    return
-                }
-            } catch {
-                self.error = .network
-                return
-            }
-        } else {
-            let cached = cache.fetchCachedExperiences("")
-            let filtered = cached.filter { $0.title.localizedCaseInsensitiveContains(query) }
-            self.experiences = applyLikedState(to: filtered)
-            if filtered.isEmpty {
-                self.error = .searchNoResults
                 return
             }
         }

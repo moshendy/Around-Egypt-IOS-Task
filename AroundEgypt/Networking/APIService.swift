@@ -32,7 +32,10 @@ class APIService: APIServiceProtocol {
     }
     
     func searchExperiences(query: String) async throws -> [Experience] {
-        let url = baseURL + "/api/v2/experiences?filter[title]=\(query)"
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
+            return []
+        }
+        let url = baseURL + "/api/v2/experiences?filter[title]=\(encodedQuery)"
         return try await fetchExperiences(from: url)
     }
     

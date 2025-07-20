@@ -20,7 +20,8 @@ final class HomeScreenUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         let searchField = app.textFields["searchTextField"]
-        XCTAssertTrue(searchField.exists)
+        let exists = searchField.waitForExistence(timeout: 5)
+        XCTAssertTrue(exists)
         searchField.tap()
         searchField.typeText("Pyramids")
         if app.keyboards.buttons["Search"].exists {
@@ -114,4 +115,5 @@ final class HomeScreenUITests: XCTestCase {
             //XCTAssertTrue(loadingIndicator.exists)
         }
     }
+
 }

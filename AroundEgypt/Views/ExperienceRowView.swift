@@ -21,13 +21,45 @@ struct ExperienceRow: View {
         VStack(alignment: .leading, spacing: 8) {
             ZStack(alignment: .topLeading) {
                 KFImage(URL(string: experience.coverPhoto))
+                    .placeholder {
+                            Image(systemName: "photo.on.rectangle.angled")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .aspectRatio(16/9, contentMode: .fill)
                     .frame(height: 180)
                     .clipped()
-                    .cornerRadius(12)
-
-              
+                    .overlay(Color.black.opacity(0.2))
+                    .cornerRadius(16)
+                    
+                
+                // Info icon
+                HStack {
+                    Spacer()
+                    Button(action: { /* info action */ }) {
+                        Image(systemName: "info.circle")
+                            .foregroundColor(.white)
+                    }
+                    .padding(8)
+                }
+                // Centered 360 badge
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        ZStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.85))
+                                .frame(width: 44, height: 44)
+                            Text("360°")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
+                    }
+                    Spacer()
+                }
 
                 VStack {
                     Spacer()

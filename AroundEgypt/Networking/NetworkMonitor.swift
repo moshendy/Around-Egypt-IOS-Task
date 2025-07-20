@@ -5,7 +5,7 @@ class NetworkMonitor: ObservableObject {
     static let shared = NetworkMonitor()
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "NetworkMonitor")
-    @Published var isConnected: Bool = true
+    @Published public private(set) var isConnected: Bool = true
 
     private init() {
         monitor.pathUpdateHandler = { [weak self] path in
@@ -15,4 +15,10 @@ class NetworkMonitor: ObservableObject {
         }
         monitor.start(queue: queue)
     }
+
+#if DEBUG
+    public func setTestConnection(_ connected: Bool) {
+        isConnected = connected
+    }
+#endif
 } 

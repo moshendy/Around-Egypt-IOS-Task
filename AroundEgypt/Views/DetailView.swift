@@ -31,14 +31,12 @@ struct DetailView: View {
                         ZStack(alignment: .bottom) {
                             KFImage(URL(string: experience.coverPhoto))
                                 .placeholder {
-                                    Color(.systemGray5)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: 260)
+                                        Image(systemName: "photo.on.rectangle.angled")
+                                            .resizable()
                                 }
                                 .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 260)
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: UIScreen.main.bounds.width, height: 260)
                                 .clipped()
                                 .background(Color.white)
                                 .ignoresSafeArea(edges: .top)

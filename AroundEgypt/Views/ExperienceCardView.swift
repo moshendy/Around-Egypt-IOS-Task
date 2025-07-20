@@ -23,6 +23,7 @@ struct ExperienceCard: View {
                     .aspectRatio(16/9, contentMode: .fill)
                     .frame(height: 160)
                     .clipped()
+                    .overlay(Color.black.opacity(0.2))
                     .cornerRadius(16)
                 // RECOMMENDED badge with star
                 if experience.recommended != 0 {
@@ -37,7 +38,7 @@ struct ExperienceCard: View {
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.85))
+                    .background(Color.black.opacity(0.4))
                     .clipShape(Capsule())
                     .padding(8)
                 }
@@ -47,7 +48,6 @@ struct ExperienceCard: View {
                     Button(action: { /* info action */ }) {
                         Image(systemName: "info.circle")
                             .foregroundColor(.white)
-                            .background(Circle().fill(Color.black.opacity(0.4)).frame(width: 28, height: 28))
                     }
                     .padding(8)
                 }
@@ -73,7 +73,7 @@ struct ExperienceCard: View {
                     Spacer()
                     HStack {
                         Image(systemName: "eye")
-                        Text("\(experience.viewsNo)")
+                        Text("\(experience.viewsNo)").bold()
                         Spacer()
                         Image(systemName: "photo.on.rectangle.angled")
                     }
@@ -81,7 +81,6 @@ struct ExperienceCard: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.4))
                     .cornerRadius(8)
                     .padding(8)
                 }

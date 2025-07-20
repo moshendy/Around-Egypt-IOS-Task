@@ -31,8 +31,7 @@ struct DetailView: View {
                         ZStack(alignment: .bottom) {
                             KFImage(URL(string: experience.coverPhoto))
                                 .placeholder {
-                                        Image(systemName: "photo.on.rectangle.angled")
-                                            .resizable()
+                                        ProgressView()
                                 }
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
